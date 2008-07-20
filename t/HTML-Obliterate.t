@@ -1,4 +1,4 @@
-use Test::More tests => 14;
+use Test::More tests => 23;
 BEGIN { use_ok('HTML::Obliterate') };
 
 my $str = q{<p>hello world</p>};
@@ -25,3 +25,22 @@ ok(HTML::Obliterate::extirpate_html($str) eq 'hello world', 'alias test');
 
 ok(HTML::Obliterate::remove_html_from_string(qq{<p>hello\nworld</p><img class="css" src="bowza">}) eq "hello\nworld", 'multi line string');
 ok(HTML::Obliterate::remove_html_from_string(qq{<p\nclass="foo">hello\nworld</p><img \nclass="css" src="bowza">}) eq "hello\nworld", 'multi line tag');
+
+
+my %ent = (
+    'Hello' => '&lt;Hello&gt;',
+    "\nHello\n\n" => "&lt;\nHello\n&gt;\n",
+    'Hello ' => '&lt;Hello&gt &n;',
+    '&;' => '&;',
+    'hi' => '&#142;hi&there;',
+    '& quot ;' => '& quot ;',
+    '& l t' => '& l t',
+    '& gt' => '& gt', 
+    "\n;" => "&lt\n;",
+);
+
+my $cnt = 0;
+for my $key (sort keys %ent) {
+    $cnt++;
+    ok(HTML::Obliterate::remove_html_from_string($ent{$key}) eq $key, "HTML entity $cnt");
+}

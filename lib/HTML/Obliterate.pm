@@ -2,7 +2,7 @@ package HTML::Obliterate;
 
 use strict;
 use warnings;
-use version;our $VERSION = qv('0.0.1');
+use version;our $VERSION = qv('0.0.2');
 
 use base 'Exporter';
 
@@ -37,6 +37,7 @@ sub remove_html {
 sub remove_html_from_string {
     my($string) = @_;
     $string =~ s{ < \W* \w+ [^>]* > }{}xmsg;
+    $string =~ s{ [&][#]? \w+ [;]? }{}xmsg;
     return $string;
 }
 
@@ -68,7 +69,7 @@ HTML::Obliterate - Perl extension to remove HTML from a string or arrayref of st
 
 =head1 DESCRIPTION
 
-Removes HTML tags from a string, efficiently and reliably.
+Removes HTML tags and entities from a string, efficiently and reliably.
 
 =head2 EXPORT
 
@@ -78,7 +79,7 @@ None by default. But all functions can be.
 
 =head2 remove_html_from_string()
 
-Takes a string, removes all HTML tags, and returns the HTMl-free version.
+Takes a string, removes all HTML tags and entities, and returns the HTMl-free version.
 
 =head2 remove_html()
 
