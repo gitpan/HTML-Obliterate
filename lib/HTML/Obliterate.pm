@@ -2,18 +2,18 @@ package HTML::Obliterate;
 
 use strict;
 use warnings;
-use version;our $VERSION = qv('0.0.2');
+our $VERSION = '0.3';
 
 use base 'Exporter';
-
 our @EXPORT_OK = qw( 
-    remove_html     remove_html_from_string
-    obliterate_html kill_html 
-    erase_html      extinguish_html 
-    extirpate_html  abolish_html 
-    doff_html       eliminate_html 
-    drop_html       purge_html 
-    strip_html      destroy_html
+    remove_html       remove_html_from_string
+    obliterate_html   kill_html 
+    erase_html        extinguish_html 
+    extirpate_html    abolish_html 
+    doff_html         eliminate_html 
+    drop_html         purge_html 
+    strip_html        destroy_html
+    defenestrate_html
 );
 
 sub remove_html {
@@ -36,8 +36,9 @@ sub remove_html {
 
 sub remove_html_from_string {
     my($string) = @_;
-    $string =~ s{ < \W* \w+ [^>]* > }{}xmsg;
-    $string =~ s{ [&][#]? \w+ [;]? }{}xmsg;
+    $string =~ s{ < \s* [!] \s* [-] \s* [-] \s* .*? [-] \s* [-] \s* > }{}oxms; # comment's w/ posible HTML
+    $string =~ s{ < \W* [^>]* > (?: [^<]* >)* }{}oxmsg;
+    $string =~ s{ [&][#]? \w+ [;]? }{}oxmsg;
     return $string;
 }
 
@@ -53,6 +54,7 @@ sub drop_html { goto &HTML::Obliterate::remove_html }
 sub purge_html { goto &HTML::Obliterate::remove_html }
 sub strip_html { goto &HTML::Obliterate::remove_html }
 sub destroy_html { goto &HTML::Obliterate::remove_html }
+sub defenestrate_html { goto &HTML::Obliterate::remove_html }
 
 1;
 
@@ -85,7 +87,7 @@ Takes a string, removes all HTML tags and entities, and returns the HTMl-free ve
 
 Same as remove_html_from_string() except you can also pass it an array ref of strings to have their HTML removed.
 
-In void context modifies the array passed:
+In void context it will modify the array passed:
 
     my @html = ...
     remove_html(\@html);
@@ -130,6 +132,10 @@ My second favorite...
 =item purge_html 
 
 =item strip_html
+
+=item defenestrate_html
+
+A new favorite
 
 =back
 
